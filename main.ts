@@ -1,6 +1,5 @@
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 
-// PX API key (replace with your actual key)
 const PX_API_KEY = "dd3d4919-ad66-4b01-9586-3ccdd9649102";
 
 serve(async (req) => {
@@ -11,21 +10,19 @@ serve(async (req) => {
   };
 
   try {
-    // Handle CORS preflight
     if (req.method === "OPTIONS") {
       return new Response(null, { status: 204, headers });
     }
 
-    // Validate method
     if (req.method !== "PUT") {
       return new Response("Method Not Allowed", { status: 405, headers });
     }
 
-    // Get identifyId from URL
     const url = new URL(req.url);
     const identifyId = url.pathname.split("/").pop();
 
     if (!identifyId || !PX_API_KEY) {
+      console.error("❌ Missing identifyId or PX API Key");
       return new Response("Missing ID or API key", { status: 400, headers });
     }
 
@@ -33,17 +30,16 @@ serve(async (req) => {
       "guidedTours", "onboardingBot", "productUpdates", "surveys", "trackUsage"
     ];
 
-    let payload = await req.json();
+    const payload = await req.json();
     const preferences: Record<string, boolean> = {};
 
     for (const key of allowedFields) {
       if (key in payload) preferences[key] = payload[key];
     }
 
-    // Log to debug
-    console.log("Forwarding preferences for", identifyId, preferences);
+    console.log(`📨 Updating preferences for: ${identifyId}`);
+    console.log("Payload:", preferences);
 
-    // Call PX API
     const pxRes = await fetch(`https://api.aptrinsic.com/v1/user/preferences/${encodeURIComponent(identifyId)}`, {
       method: "PUT",
       headers: {
@@ -53,15 +49,18 @@ serve(async (req) => {
       body: JSON.stringify(preferences)
     });
 
+    console.log("PX API response status:", pxRes.status);
+
     if (pxRes.status === 204) {
       return new Response("OK", { status: 204, headers });
     }
 
     const errorText = await pxRes.text();
+    console.warn("⚠️ PX API error:", errorText);
     return new Response(errorText, { status: pxRes.status, headers });
 
   } catch (err) {
-    console.error("💥 Deno crashed:", err);
+    console.error("💥 Fatal error in Deno handler:", err.message);
     return new Response("Internal Server Error", { status: 500, headers });
   }
 });
