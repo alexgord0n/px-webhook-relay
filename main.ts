@@ -1,7 +1,7 @@
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 
 // Your PX API key (replace with actual key or fetch from env if secured)
-const PX_API_KEY = "REPLACE_WITH_YOUR_PX_API_KEY";
+const PX_API_KEY = "dd3d4919-ad66-4b01-9586-3ccdd9649102";
 
 serve(async (req) => {
   const headers = {
@@ -40,11 +40,11 @@ serve(async (req) => {
   }
 
   // Forward to PX API
-  const pxRes = await fetch(`https://api.aptrinsic.com/v1/user/preferences/${encodeURIComponent(identifyId)}`, {
+  const pxRes = await fetch(`https://api.aptrinsic.com/v1/user/preferences/redpeacock610`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      "X-APTRINSIC-API-KEY": dd3d4919-ad66-4b01-9586-3ccdd9649102
+      "X-APTRINSIC-API-KEY": PX_API_KEY
     },
     body: JSON.stringify(preferences)
   });
