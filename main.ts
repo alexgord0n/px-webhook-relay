@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 
+// Replace this with your actual PX API key
 const PX_API_KEY = "dd3d4919-ad66-4b01-9586-3ccdd9649102";
 
 serve(async (req) => {
@@ -52,7 +53,7 @@ serve(async (req) => {
     console.log("PX API response status:", pxRes.status);
 
     if (pxRes.status === 204) {
-      return new Response("OK", { status: 204, headers });
+      return new Response(null, { status: 204, headers }); // ✅ must be null for 204
     }
 
     const errorText = await pxRes.text();
