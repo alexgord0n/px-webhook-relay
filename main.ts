@@ -44,7 +44,7 @@ serve(async (req) => {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      "X-APTRINSIC-API-KEY": PX_API_KEY
+      "X-APTRINSIC-API-KEY": dd3d4919-ad66-4b01-9586-3ccdd9649102
     },
     body: JSON.stringify(preferences)
   });
