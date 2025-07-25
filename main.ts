@@ -40,7 +40,7 @@ serve(async (req) => {
   }
 
   // Forward to PX API
-  const pxRes = await fetch(`https://api.aptrinsic.com/v1/user/preferences/redpeacock610`, {
+  const pxRes = await fetch(`https://api.aptrinsic.com/v1/user/preferences/${encodeURIComponent(identifyId)}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
